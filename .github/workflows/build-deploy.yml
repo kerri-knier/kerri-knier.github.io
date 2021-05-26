@@ -1,0 +1,39 @@
+# Name the action to distinguish it from other configured actions
+name: Build and Deploy
+
+# Only trigger the action on push to the specified branches
+on:
+  push:
+    branches:
+      - main
+
+# Tasks to be carried out in the action
+jobs:
+  # Define a job by assigning a unique name
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      # Use an action defined by a third party
+      uses: actions/checkout@v1
+      # Configure a specific version of node
+    - uses: actions/setup-node@v1 #this installs node and npm for us
+      with:
+        node-version: '16.2.x'
+      # Cache previously installed packages following https://github.com/actions/cache
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-    
+    - name: Build
+      run: |
+        npm install
+        npm run-script build-ghpages
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: dist/app
