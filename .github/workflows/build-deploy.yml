@@ -28,9 +28,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-    
     - name: Build
+      working-directory: app
       run: |
         npm install
-        npm run-script build-ghpages
+        npm run build-ghpages
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
