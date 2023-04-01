@@ -1,1 +1,0 @@
-This project is a static Angular webpage that uses GitHub Actions to automatically build and deploy to GitHub Pages. You can view the webpage at [kerri.dev](https://kerri.dev).
