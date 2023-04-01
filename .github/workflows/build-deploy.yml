@@ -30,7 +30,7 @@ jobs:
     - name: Build
       working-directory: app
       run: |
-        npm install
+        npm install --production
         npm run build
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
