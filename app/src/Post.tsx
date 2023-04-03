@@ -1,31 +1,21 @@
 import {useEffect, useState} from "react";
 import {GetPosts} from "./API";
 
-const initialPosts = [
-    "my first post",
-    "my second post",
-    "my third post",
-    "my fourth and extra long post about anything and everything because now its making sense",
-    "my fifth post",
-    "my sixth post",
-    "my seventh post",
-    "my eighth post",
-    "my ninth post",
-    "my tenth post",
-]
-
 export interface PostText {
     text: string
 }
 
 export function Posts() {
-    const [posts, setPosts] = useState(initialPosts)
+    const [posts, setPosts] = useState([] as string[])
 
     useEffect(() => {
-        GetPosts().then(r => {
+        async function initialisePosts() {
+            const r = await GetPosts()
             console.log("got posts")
             setPosts(r)
-        })
+        }
+
+        initialisePosts()
     }, []);
 
     const appendPost = (newPost: string) => {
@@ -41,13 +31,13 @@ export function Posts() {
     return (
         <>
             <CreatePost onNewPost={appendPost}/>
-            <ul>{posts.map(post => <Post text={post}/>).reverse()}</ul>
+            <ul>{posts.map(post => <Post key={post} text={post}/>).reverse()}</ul>
         </>
     );
 }
 
 export function Post({text}: PostText) {
-    return <li key={text}> {text} </li>
+    return <li> {text} </li>
 }
 
 
