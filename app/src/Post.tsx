@@ -1,4 +1,5 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {GetPosts} from "./API";
 
 const initialPosts = [
     "my first post",
@@ -19,6 +20,10 @@ export interface PostText {
 
 export function Posts() {
     const [posts, setPosts] = useState(initialPosts)
+
+    useEffect(() => {
+        GetPosts().then(r => console.log("got posts"))
+    }, []);
 
     const appendPost = (newPost: string) => {
         if (newPost === "") {
