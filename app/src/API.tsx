@@ -9,9 +9,11 @@ export async function GetPosts() {
         const result = await response.json()
         console.log("result:")
         console.log(result)
+        return result
 
     } catch (e) {
         console.error("failed to get posts:", e)
+        return []
     }
 
 }

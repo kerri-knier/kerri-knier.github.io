@@ -22,7 +22,10 @@ export function Posts() {
     const [posts, setPosts] = useState(initialPosts)
 
     useEffect(() => {
-        GetPosts().then(r => console.log("got posts"))
+        GetPosts().then(r => {
+            console.log("got posts")
+            setPosts(r)
+        })
     }, []);
 
     const appendPost = (newPost: string) => {
@@ -33,6 +36,7 @@ export function Posts() {
         setPosts(posts.concat(newPost))
     }
 
+    console.log("rendering")
     // TODO use post ids as list keys
     return (
         <>
