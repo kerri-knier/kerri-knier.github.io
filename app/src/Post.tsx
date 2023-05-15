@@ -1,43 +1,73 @@
 import {useEffect, useState} from "react";
-import {GetPosts} from "./API";
+import {GetPosts, NewPost} from "./API";
 
 export interface PostText {
     text: string
 }
 
+export type Post = {
+    id: string
+    SK: string // date
+    text: string
+}
+
 export function Posts() {
-    const [posts, setPosts] = useState([] as string[])
+    const [posts, setPosts] = useState([] as Post[])
 
     useEffect(() => {
         async function initialisePosts() {
             const r = await GetPosts()
             console.log("got posts")
-            setPosts(r)
+            setPosts(r.filter( (s: Post) =>{
+                console.log(s)
+                console.log("has text")
+                console.log(s.text)
+                return s.text
+            }))
         }
 
         initialisePosts()
     }, []);
 
     const appendPost = (newPost: string) => {
-        if (newPost === "") {
+        if (!newPost) {
             return
         }
 
-        setPosts(posts.concat(newPost))
+        NewPost(newPost).then(result => {
+            if (!result.text) {
+                return
+            }
+
+            setPosts(posts.concat(result))
+        })
     }
 
     console.log("rendering")
-    // TODO use post ids as list keys
     return (
         <>
             <CreatePost onNewPost={appendPost}/>
-            <ul>{posts.map(post => <Post key={post} text={post}/>).reverse()}</ul>
+            <ul>{posts.sort((a,b) => a.SK < b.SK ? 1:-1).map(post => <PostItem key={post.id} post={post}/>)}</ul>
         </>
     );
 }
 
-export function Post({text}: PostText) {
-    return <li> {text} </li>
+export function PostItem({post}: {post:Post}) {
+    let date = parseDate(post.SK)
+
+    return <li><p>
+        {post.text} <br></br>
+        {date} 
+        </p></li>
+}
+
+function parseDate(sk: string) : string {
+    let datepart = sk.split("#")[1]
+    let date = new Date(datepart)
+    let month = date.toLocaleString('default', { month: "long" })
+    let year = date.getUTCFullYear()
+
+    return month + " " + year
 }
 
 
