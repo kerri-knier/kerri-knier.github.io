@@ -29,14 +29,14 @@ export async function NewPost(text: string) : Promise<Post> {
     try {
         let body = JSON.stringify(text)
 
-        console.log("posting: "+text)
+        console.log("api posting: "+text)
         const response = await fetch(posts_api, {
             method: "POST",
             body: body,
             headers: {"Content-type": "application/json; charset=UTF-8"}
         });
         const result = await response.json()
-        console.log("result:")
+        console.log("api result:")
         console.log(result)
         return result
 

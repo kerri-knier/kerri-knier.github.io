@@ -38,7 +38,7 @@ export function Posts() {
             if (!result.text) {
                 return
             }
-
+            
             setPosts(posts.concat(result))
         })
     }
@@ -55,19 +55,25 @@ export function Posts() {
 export function PostItem({post}: {post:Post}) {
     let date = parseDate(post.SK)
 
-    return <li><p>
-        {post.text} <br></br>
+    return <li>
+        <div className="date">
         {date} 
-        </p></li>
+        </div>
+        <p>
+        {post.text}
+        <br></br>
+        </p>
+        </li>
 }
 
 function parseDate(sk: string) : string {
     let datepart = sk.split("#")[1]
     let date = new Date(datepart)
+    let day = date.getDate()
     let month = date.toLocaleString('default', { month: "long" })
-    let year = date.getUTCFullYear()
+    let year = date.getFullYear()
 
-    return month + " " + year
+    return day + " " + month + " " + year
 }
 
 
@@ -75,23 +81,21 @@ export function CreatePost({onNewPost}: any) {
 
     const [newPost, setNewPost] = useState("")
 
-    const appendPost = (event: any) => {
-        event.preventDefault();
+    const appendPost = () => {
         onNewPost(newPost)
-        event.target.reset();
         setNewPost("");
     };
 
     return (
-        <form className={"postForm"} onSubmit={appendPost}>
-            <input className={"postInput"}
-                   type="text"
+        <div className={"postForm"}>
+            <textarea className={"postInput"}
                    placeholder="Create post"
+                   value={newPost}
                    onChange={e => {
                        setNewPost(e.target.value);
                    }}
             />
-            <button className={"postButton"} type="submit">Save</button>
-        </form>
+            <button className={"postButton"} type="submit" onClick={appendPost}>Save</button>
+        </div>
     );
 }
