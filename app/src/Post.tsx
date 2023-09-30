@@ -6,9 +6,11 @@ export interface PostText {
 }
 
 export type Post = {
-    id: string
-    SK: string // date
+    PK: string // post id
+    SK: string // type id
     text: string
+    month: string
+    created: string
 }
 
 export function Posts() {
@@ -47,13 +49,13 @@ export function Posts() {
     return (
         <>
             <CreatePost onNewPost={appendPost}/>
-            <ul>{posts.sort((a,b) => a.SK < b.SK ? 1:-1).map(post => <PostItem key={post.id} post={post}/>)}</ul>
+            <ul>{posts.sort((a,b) => a.created < b.created ? 1:-1).map(post => <PostItem key={post.PK+post.SK} post={post}/>)}</ul>
         </>
     );
 }
 
 export function PostItem({post}: {post:Post}) {
-    let date = parseDate(post.SK)
+    let date = parseDate(post.created)
 
     return <li>
         <div className="date">
@@ -66,9 +68,8 @@ export function PostItem({post}: {post:Post}) {
         </li>
 }
 
-function parseDate(sk: string) : string {
-    let datepart = sk.split("#")[1]
-    let date = new Date(datepart)
+function parseDate(created: string) : string {
+    let date = new Date(created)
     let day = date.getDate()
     let month = date.toLocaleString('default', { month: "long" })
     let year = date.getFullYear()

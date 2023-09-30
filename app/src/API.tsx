@@ -42,6 +42,6 @@ export async function NewPost(text: string) : Promise<Post> {
 
     } catch (e) {
         console.error("failed to create post:", e)
-        return {id: "", SK: "", text: ""}
+        return {} as Post
     }
 }
