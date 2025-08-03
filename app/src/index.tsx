@@ -8,7 +8,7 @@ import { AuthProvider } from "react-oidc-context";
 const cognitoAuthConfig = {
   authority: "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_xORCGl7n7",
   client_id: "6sjrkpl6krlmq6365hke6uq8sm",
-  redirect_uri: "http://localhost:3000",
+  redirect_uri: "https://kerri.dev",
   response_type: "code",
   scope: "email openid phone",
   storage: localStorage,
