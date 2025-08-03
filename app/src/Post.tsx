@@ -14,7 +14,7 @@ export type Post = {
     created: string
 }
 
-export function Posts() {
+export function Posts({isAuthenticated}: {isAuthenticated: boolean}) {
     const [posts, setPosts] = useState([] as Post[])
 
     useEffect(() => {
@@ -46,10 +46,9 @@ export function Posts() {
         })
     }
 
-    console.log("rendering")
     return (
         <>
-            <CreatePost onNewPost={appendPost}/>
+            { isAuthenticated && (<CreatePost onNewPost={appendPost}/> )}
             <ul>{posts.sort((a,b) => a.created < b.created ? 1:-1).map(post => <PostItem key={post.PK+post.SK} post={post}/>)}</ul>
         </>
     );

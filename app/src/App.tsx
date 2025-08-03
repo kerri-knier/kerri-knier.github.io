@@ -10,19 +10,12 @@ function App() {
   const [username, setUsername] = useState("");
 
   const signOutRedirect = () => {
+    auth.removeUser();
     const clientId = "6sjrkpl6krlmq6365hke6uq8sm";
-    const logoutUri = "<logout uri>";
+    const logoutUri = "https://kerri.dev";
     const cognitoDomain = "https://eu-west-2xorcgl7n7.auth.eu-west-2.amazoncognito.com";
     window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
   };
-
-  if (auth.isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (auth.error) {
-    return <div>Encountering error... {auth.error.message}</div>;
-  }
 
   if (auth.isAuthenticated) {
     if (auth.user?.id_token) {
@@ -37,27 +30,23 @@ function App() {
             setUsername(cognitoUser)
         }
     }
-    return (
-      <div className="App">
-        <pre> Hello: {username} </pre>
-        <pre> ID Token: {auth.user?.id_token} </pre>
-        <pre> Access Token: {auth.user?.access_token} </pre>
-        <pre> Refresh Token: {auth.user?.refresh_token} </pre>
-
-        <button onClick={() => auth.removeUser()}>Sign out</button>
-        <header className="App-header">
-                <Posts/>
-            </header>
-      </div>
-    );
   }
 
   return (
-    <div>
-      <button onClick={() => auth.signinRedirect()}>Sign in</button>
-      <button onClick={() => signOutRedirect()}>Sign out</button>
-    </div>
-  );
+      <div className="App">
+        <div className={auth.isAuthenticated? 'visible':'hidden'}> 
+            <pre> Hello: {username} </pre>
+            <button onClick={() => signOutRedirect() }>Sign out</button> 
+        </div>
+        <div className={!auth.isAuthenticated? 'visible':'hidden'}> 
+            <button onClick={() => auth.signinRedirect() }>Sign In</button> 
+        </div>
+        
+        <header className="App-header">
+            <Posts isAuthenticated={auth.isAuthenticated}></Posts>
+        </header>
+      </div>
+    );
 }
 
 export default App;
