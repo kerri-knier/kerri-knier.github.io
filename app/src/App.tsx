@@ -33,20 +33,29 @@ function App() {
   }
 
   return (
-      <div className="App">
-        <div className={auth.isAuthenticated? 'visible':'hidden'}> 
-            <pre> Hello: {username} </pre>
-            <button onClick={() => signOutRedirect() }>Sign out</button> 
+    <div className="App tech-blog-app" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', width: '100vw' }}>
+      <nav className="navbar tech-blog-navbar" style={{ width: '100vw' }}>
+        <div className="navbar-content tech-blog-navbar-content">
+            <span className="brand tech-blog-brand">kerri.dev</span>
+          {auth.isAuthenticated ? (
+            <div className="user-info tech-blog-user-info">
+              <span className="username tech-blog-username">Hello, {username}!</span>
+              <button className="modern-btn signout tech-blog-signout" onClick={signOutRedirect}>
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <button className="modern-btn signin tech-blog-signin" onClick={() => auth.signinRedirect()}>
+              Sign In
+            </button>
+          )}
         </div>
-        <div className={!auth.isAuthenticated? 'visible':'hidden'}> 
-            <button onClick={() => auth.signinRedirect() }>Sign In</button> 
-        </div>
-        
-        <header className="App-header">
-            <Posts isAuthenticated={auth.isAuthenticated}></Posts>
-        </header>
-      </div>
-    );
+      </nav>
+      <main className="main-content tech-blog-main-content" style={{ flex: 1, width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Posts isAuthenticated={auth.isAuthenticated} />
+      </main>
+    </div>
+  );
 }
 
 export default App;
