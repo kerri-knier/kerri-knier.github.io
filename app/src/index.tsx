@@ -9,7 +9,7 @@ import { WebStorageStateStore } from 'oidc-client-ts';
 const cognitoAuthConfig: AuthProviderProps = {
   authority: "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_xORCGl7n7",
   client_id: "6sjrkpl6krlmq6365hke6uq8sm",
-  redirect_uri: "https://kerri.dev",
+  redirect_uri: process.env.REACT_APP_REDIRECT_URI || 'https://kerri.dev',
   response_type: "code",
   scope: "email openid phone",
   userStore: new WebStorageStateStore({store: window.localStorage})
