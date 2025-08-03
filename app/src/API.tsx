@@ -24,16 +24,19 @@ export async function GetPosts() {
 
 }
 
-export async function NewPost(text: string) : Promise<Post> {
-
+export async function NewPost(jwt: string, text: string) : Promise<Post> {
+   
     try {
         let body = JSON.stringify(text)
 
-        console.log("api posting: "+text)
+        console.log("api posting: "+text, "auth:", jwt)
         const response = await fetch(posts_api, {
             method: "POST",
             body: body,
-            headers: {"Content-type": "application/json; charset=UTF-8"}
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Authorization": `Bearer ${jwt}`
+            }
         });
         const result = await response.json()
         console.log("api result:")

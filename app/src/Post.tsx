@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {GetPosts, NewPost} from "./API";
+import { useAuth } from "react-oidc-context";
 
 export interface PostText {
     text: string
@@ -31,12 +32,12 @@ export function Posts() {
         initialisePosts()
     }, []);
 
-    const appendPost = (newPost: string) => {
+    const appendPost = (jwt: string, newPost: string) => {
         if (!newPost) {
             return
         }
 
-        NewPost(newPost).then(result => {
+        NewPost(jwt, newPost).then(result => {
             if (!result.text) {
                 return
             }
@@ -81,9 +82,13 @@ function parseDate(created: string) : string {
 export function CreatePost({onNewPost}: any) {
 
     const [newPost, setNewPost] = useState("")
+    const auth = useAuth();
 
     const appendPost = () => {
-        onNewPost(newPost)
+        if (!auth.isAuthenticated) {
+            auth.signinRedirect()
+        }
+        onNewPost(auth.user?.id_token, newPost)
         setNewPost("");
     };
 
